@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About Us - Voice Translator</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #333;
+    }
+
+    nav {
+      background-color: #4CAF50;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo a {
+      color: white;
+      font-size: 1.6em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-size: 1.1em;
+      transition: background-color 0.3s;
+      padding: 8px 12px;
+      border-radius: 5px;
+    }
+
+    nav .nav-links a:hover {
+      background-color: #45a049;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 100px auto 40px;
+      padding: 20px;
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #4CAF50;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.1em;
+      line-height: 1.6;
+      color: #555;
+    }
+
+    .footer {
+      background-color: #4CAF50;
+      color: white;
+      padding: 2px 0;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 1em;
+      box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        margin-top: 120px;
+        width: 90%;
+      }
+
+      nav .nav-links {
+        flex-direction: column;
+      }
+
+      nav .nav-links a {
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='ebooks/logo.png') }}" alt="Voice Translator" style="height: 40px;" width="40px">
+      </a>
+    </div>   
+    <div class="logo">
+      <a href="index.html">Voice Translator</a>
+    </div> 
+    <div class="nav-links">
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('aboutus') }}">About Us</a>
+      <a href="{{ url_for('ebooks') }}">E-Books</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>About Us</h1>
+    <p>
+      Welcome to Voice Translator – your bridge to understanding and communication across India’s diverse linguistic landscape.
+    </p>
+    <p>
+      Our mission is simple: to break down language barriers and make communication accessible for everyone through cutting-edge voice and text translation technology. Whether you're traveling, studying, or communicating with loved ones, our tool is built to help you connect in a wide range of Indian languages with ease.
+    </p>
+    <p>
+      The Voice Translator platform combines speech recognition, real-time translation, and text-to-speech to offer a seamless experience. We're committed to continuous improvement and innovation, ensuring our services grow along with the needs of our users.
+    </p>
+    <p>
+      Thank you for being part of this journey toward a more connected and inclusive India.
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p style="color: #f9f9f9;">© 2025 . All Rights Reserved.</p>
+  </div>
+
+</body>
+</html>
