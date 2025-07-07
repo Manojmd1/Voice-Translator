@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Voice Translator - Indian Languages</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f3f3f3;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #4CAF50;
+      margin-top: 80px;
+      font-size: 2.5em;
+    }
+
+    nav {
+      background-color: #4CAF50;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    nav .logo a {
+      color: white;
+      font-size: 1.6em;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    nav .nav-links a {
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      font-size: 1.2em;
+      transition: background-color 0.3s;
+    }
+
+    nav .nav-links a:hover {
+      background-color: #45a049;
+      border-radius: 5px;
+    }
+
+    .container {
+      width: 80%;
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    select, textarea {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 1em;
+    }
+
+    select:focus, textarea:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+
+    button {
+      padding: 12px 25px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      background-color: #4CAF50;
+      color: white;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    #manualInput {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    p {
+      font-size: 1.2em;
+      color: #555;
+    }
+
+    #inputText, #outputText {
+      font-weight: bold;
+      color: #4CAF50;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 15px;
+      border-radius: 5px;
+    }
+
+    .buttons-container {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .buttons-container button {
+      width: 48%;
+      margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+      }
+
+      button, .buttons-container button {
+        width: 100%;
+      }
+
+      .buttons-container {
+        flex-direction: column;
+      }
+
+      nav .nav-links a {
+        font-size: 1em;
+        padding: 8px 10px;
+      }
+
+      nav .logo a {
+        font-size: 1.3em;
+      }
+
+      h1 {
+        font-size: 2em;
+      }
+    }
+
+    footer {
+      background-color: #4CAF50;
+      color: white;
+      padding: 2px;
+      text-align: center;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      font-size: 1em;
+      box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav>
+    <div class="logo">
+      <a href="{{ url_for('index') }}">
+        <img src="{{ url_for('static', filename='ebooks/logo.png') }}" alt="Voice Translator" style="height: 40px;" width="40px">
+      </a>
+    </div>   
+    <div class="logo">
+      <a href="index.html">Voice Translator</a>
+    </div> 
+    <div class="nav-links">
+              <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('aboutus') }}">About Us</a>
+        <a href="{{ url_for('ebooks') }}">E-Books</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>🎤 Voice Translator (Indian Languages)</h1>
+
+    <label>Select Target Language:</label>
+    <select id="langSelect">
+      <option value="hi">Hindi</option>
+      <option value="bn">Bengali</option>
+      <option value="ta">Tamil</option>
+      <option value="te">Telugu</option>
+      <option value="kn">Kannada</option>
+      <option value="ml">Malayalam</option>
+      <option value="mr">Marathi</option>
+      <option value="gu">Gujarati</option>
+      <option value="pa">Punjabi</option>
+      <option value="ur">Urdu</option>
+    </select>
+
+    <div class="buttons-container">
+      <button onclick="startListening()">🎙️ Start Recording</button>
+      <button onclick="stopListening()">🛑 Stop Recording</button>
+    </div>
+
+    <label for="manualInput">Enter Text to Translate:</label>
+    <textarea id="manualInput" placeholder="Type your text here"></textarea>
+    <button onclick="translateManualInput()">Translate Manually</button>
+
+    <p><strong>You said:</strong> <span id="inputText"></span></p>
+    <p><strong>Translation:</strong> <span id="outputText"></span></p>
+
+    <audio id="audio" controls></audio>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p style="color: white;">&copy; 2025 . All Rights Reserved.</p>
+  </footer>
+
+  <script>
+    let recognition;
+    let currentLang = 'hi';
+
+    document.getElementById('langSelect').addEventListener('change', function () {
+      currentLang = this.value;
+    });
+
+    function startListening() {
+      recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+      recognition.lang = 'en-US';
+      recognition.start();
+
+      recognition.onresult = function (event) {
+        const text = event.results[0][0].transcript;
+        document.getElementById('inputText').innerText = text;
+
+        fetch('/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: text,
+            lang: currentLang
+          })
+        })
+          .then(response => response.json())
+          .then(data => {
+            document.getElementById('outputText').innerText = data.translated_text;
+            const audio = document.getElementById('audio');
+            audio.src = data.audio_url;
+            audio.play();
+          });
+      };
+
+      recognition.onerror = function (event) {
+        console.error('Recognition error:', event.error);
+      };
+    }
+
+    function stopListening() {
+      if (recognition) {
+        recognition.stop();
+      }
+    }
+
+    function translateManualInput() {
+      const manualText = document.getElementById('manualInput').value;
+
+      if (manualText.trim() === '') {
+        alert('Please enter some text for translation.');
+        return;
+      }
+
+      fetch('/translate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: manualText,
+          lang: currentLang
+        })
+      })
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('outputText').innerText = data.translated_text;
+          const audio = document.getElementById('audio');
+          audio.src = data.audio_url;
+          audio.play();
+        });
+    }
+  </script>
+</body>
+</html>
